@@ -1,4 +1,4 @@
-const db = require ('./db/index')
+import db from './initDb';
 const sequelize = db.sequelize
 
 const sequelizeConnection = async () => {
@@ -6,10 +6,9 @@ const sequelizeConnection = async () => {
         sequelize
             .authenticate()
             .then(() => {
-
                 console.log('Postgres connection has been established successfully.')
             })
     } catch (error) {
         console.error('Unable to connect to the database:', error)
     }}
-sequelizeConnection().then()
+export default sequelizeConnection().then()

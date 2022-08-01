@@ -1,4 +1,6 @@
-const {Sequelize} = require("sequelize");
+import {Sequelize} from "sequelize";
+import User from "../entities/user.entities";
+
 
 const sequelize = new Sequelize({
     database: "doeporbf4u73q",
@@ -15,8 +17,7 @@ const sequelize = new Sequelize({
     },
 });
 
-const User = require('./databaseModel')(sequelize)
-module.exports = {
+export default {
     sequelize: sequelize,
-    user: User
+    user: User(sequelize)
 }
