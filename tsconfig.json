@@ -4,7 +4,6 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "./build",
-    "rootDir": "./tasks2/app.ts",
     "strict": true,
     "noImplicitAny": false,
     "moduleResolution": "node",

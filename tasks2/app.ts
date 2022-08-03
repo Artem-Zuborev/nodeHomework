@@ -1,14 +1,14 @@
 // @ts-ignore
 import express from 'express';
 import * as http from 'http';
+import router from './routes/main.router';
 
-import dataRouter  from './routes/user.router';
 import startDb  from './db/startDatabase';
 
 const app = express();
 app.use(express.json());
 
-app.use('/data', dataRouter);
+app.use('', router);
 
 app.use('/', function(req, res) {
     res.send(`server works on host ${port}`);

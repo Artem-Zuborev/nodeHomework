@@ -1,12 +1,15 @@
-import {Sequelize} from "sequelize";
+import { Sequelize } from "sequelize";
 import User from "../entities/user.entities";
+import  Group  from "../entities/group.entities"
+import UserGroup from "../entities/userGroup.entities"
+import { config } from "../config/db.config";
 
 
 const sequelize = new Sequelize({
-    database: "doeporbf4u73q",
-    username: "adesplbadfjaza",
-    password: "acbad72104c4a41f382ceecae7850aff442e9c1219c3d330a6ae1feafd4f2ee3",
-    host: "ec2-54-77-40-202.eu-west-1.compute.amazonaws.com",
+    database: config.database,
+    username: config.username,
+    password: config.password,
+    host: config.host,
     port: 5432,
     dialect: "postgres",
     dialectOptions: {
@@ -16,8 +19,31 @@ const sequelize = new Sequelize({
         }
     },
 });
+const user = User(sequelize);
+const group = Group(sequelize);
+const userGroup = UserGroup(sequelize)
+
+async function initDB() {
+    user.belongsToMany(group, {
+        through: userGroup,
+        as: 'userId',
+        foreignKey: 'userId'
+    });
+    group.belongsToMany(user, {
+        through: userGroup,
+        as: 'groupId',
+        foreignKey: 'groupId'
+    });
+    await sequelize.sync();
+    await user.sync();
+    await group.sync();
+    await userGroup.sync();
+}
+initDB().then()
 
 export default {
     sequelize: sequelize,
-    user: User(sequelize)
+    user: User(sequelize),
+    group: Group(sequelize),
+    userGroup: UserGroup(sequelize)
 }

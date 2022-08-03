@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import userModule from '../modules/user.module';
+import userService from '../services/user.service';
 import * as crypto from "crypto";
 
 class UserController {
     async getAllUsers(req: Request, res: Response) {
         try {
-            const users = await userModule.getAllUsers();
+            const users = await userService.getAllUsers();
             if (users) {
                 res.send(users);
             } else {
@@ -19,11 +19,11 @@ class UserController {
     async getUserById(req: Request, res: Response) {
         const id = req.params?.id;
         try {
-            const user = await userModule.getUserById(id as string);
+            const user = await userService.getUserById(id as string);
             if (user) {
-                res.status(200).send(user);
+                return res.status(200).send(user);
             } else {
-                res.sendStatus(404).send({ message: 'Cannot find user' });
+                return  res.sendStatus(404).send({ message: 'Cannot find user' });
             }
         } catch (err) {
             console.log('Cannot find user', err);
@@ -38,7 +38,7 @@ class UserController {
                 age: req.body.age,
                 isdeleted: req.body.isdeleted
             };
-        const newData = await userModule.postUser(newUser);
+        const newData = await userService.postUser(newUser);
         if(newData) {
             return  res.status(201).json(newData);
         } else {
@@ -48,14 +48,14 @@ class UserController {
 
     async putUser(req: Request, res: Response) {
         try {
-            const user = await userModule.putUser(
+            const user = await userService.putUser(
                 req.params.id as string,
                 req.body
             );
             if (user) {
-                res.send(user);
+                return res.status(201).send(user);
             } else {
-                res.status(204).send({ message: 'Cannot update user' });
+                return res.status(204).send({ message: 'Cannot update user' });
             }
         } catch (err) {
             console.log('Cannot update user', err);
@@ -65,8 +65,8 @@ class UserController {
 
     async deleteUser(req: Request, res: Response) {
         try {
-            const message = await userModule.deleteUser(req.params.id as string);
-            res.status(201).send(message);
+            const message = await userService.deleteUser(req.params.id as string);
+            return res.status(201).send(message);
         } catch (err) {
             console.log('Cannot delete user', err);
         }

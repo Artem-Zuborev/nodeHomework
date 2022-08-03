@@ -1,51 +1,46 @@
+import userRepository from "../repositories/user.repository";
 import {UserModel} from "../types/user.model";
-import db from '../db/initDb';
-
-
-const User = db.user
-
 
 class UserService {
     async getAllUsers() {
         try {
-            return User.findAll();
+            return await userRepository.getAllUsers();
         } catch (err) {
-            console.log(`Cannot find Users ${err}`);
+            return { message: 'Cannot update User' };
         }
     }
-
 
     async getUserById(id: string) {
         try {
-            return await User.findByPk(id);
+            return await userRepository.getUserById(id);
         } catch (err) {
-            console.log(`Cannot find User ${err}`);
+            return { message: `Cannot get User ${err}` };
         }
     }
 
-    async postUser(data: Partial<UserModel>) {
+    async postUser(user: UserModel) {
         try {
-            return await User.create(data);
+            return await userRepository.postUser(user);
         } catch (err) {
-            console.log(`Cannot create user ${err}`);
+            return { message: `Cannot get User ${err}` };
         }
     }
 
     async putUser(id: string, data: Partial<UserModel>) {
         try {
-            await User.update({ ...data }, { where: { id } });
-            return { message: 'User successfully updated' };
+            await userRepository.putUser(id, data);
+            return userRepository.getUserById(id);
         } catch (err) {
-            console.log(`Cannot update User ${err}`);
+            return { message: 'Cannot update User' };
         }
     }
 
-    async deleteUser(id: string, data: Partial<UserModel>) {
+    async deleteUser(id: string) {
         try {
-            await User.update({ ...data }, { where: { id } });
-            return { message: 'User successfully updated' };
+            await userRepository.deleteUser(id, { isdeleted: true });
+            return { message: 'User successfully deleted' };
         } catch (err) {
-            console.log(`Cannot update User ${err}`);
+            return { message: `Cannot delete User ${err}` };
         }
     }
 }

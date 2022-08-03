@@ -1,6 +1,6 @@
 // @ts-ignore
 import express  from 'express';
-import SchemaValidate  from '../services/validateSchemas.service';
+import SchemaValidate  from '../repositories/validateSchemas.repository';
 import UserController from "../controllers/user.controller";
 import schemaUser from '../schemas/user.schema'
 const userRouter = express.Router();
