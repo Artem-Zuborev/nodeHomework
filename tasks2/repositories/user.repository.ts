@@ -1,52 +1,35 @@
 import {UserModel} from "../types/user.model";
 import db from '../db/initDb';
-
-
-const User = db.user
-
+import {Message} from "csvtojson/v2/ProcessFork";
 
 class UserRepository {
+    public User = db.user;
+
     async getAllUsers() {
-        try {
-            return User.findAll();
-        } catch (err) {
-            console.log(`Cannot find Users ${err}`);
-        }
+        return this.User.findAll();
     }
 
 
-    async getUserById(id: string) {
-        try {
-            return await User.findByPk(id);
-        } catch (err) {
-            console.log(`Cannot find User ${err}`);
-        }
+    async getUserById(id: string): Promise<UserModel> {
+        return await this.User.findByPk(id);
     }
 
-    async postUser(data: Partial<UserModel>) {
-        try {
-            return await User.create(data);
-        } catch (err) {
-            console.log(`Cannot create user ${err}`);
-        }
+    async postUser(data: Partial<UserModel>): Promise<UserModel> {
+        return await this.User.create(data);
     }
 
-    async putUser(id: string, data: Partial<UserModel>) {
-        try {
-            await User.update({ ...data }, { where: { id } });
-            return { message: 'User successfully updated' };
-        } catch (err) {
-            console.log(`Cannot update User ${err}`);
-        }
+    async putUser(id: string, data: Partial<UserModel>): Promise<Message | unknown> {
+        await this.User.update({ ...data }, { where: { id } });
+        return { message: 'User successfully updated' };
     }
 
-    async deleteUser(id: string, data: Partial<UserModel>) {
-        try {
-            await User.update({ ...data }, { where: { id } });
-            return { message: 'User successfully updated' };
-        } catch (err) {
-            console.log(`Cannot update User ${err}`);
-        }
+    async deleteUser(id: string, data: Partial<UserModel>): Promise<Message | unknown> {
+        await this.User.update({ ...data }, { where: { id } });
+        return { message: 'User successfully updated' };
+    }
+
+    async getUserByLogin(login: string): Promise<UserModel> {
+        return await this.User.findOne({where: {login}});
     }
 }
 

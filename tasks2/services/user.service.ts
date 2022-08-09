@@ -1,8 +1,8 @@
 import userRepository from "../repositories/user.repository";
-import {UserModel} from "../types/user.model";
+import { UserModel } from "../types/user.model";
 
 class UserService {
-    async getAllUsers() {
+    async getAllUsers(): Promise<UserModel | unknown> {
         try {
             return await userRepository.getAllUsers();
         } catch (err) {
@@ -10,7 +10,7 @@ class UserService {
         }
     }
 
-    async getUserById(id: string) {
+    async getUserById(id: string): Promise<UserModel | unknown> {
         try {
             return await userRepository.getUserById(id);
         } catch (err) {
@@ -18,7 +18,7 @@ class UserService {
         }
     }
 
-    async postUser(user: UserModel) {
+    async postUser(user: UserModel): Promise<UserModel | unknown> {
         try {
             return await userRepository.postUser(user);
         } catch (err) {
@@ -26,7 +26,7 @@ class UserService {
         }
     }
 
-    async putUser(id: string, data: Partial<UserModel>) {
+    async putUser(id: string, data: Partial<UserModel>): Promise<UserModel | unknown> {
         try {
             await userRepository.putUser(id, data);
             return userRepository.getUserById(id);
@@ -35,7 +35,7 @@ class UserService {
         }
     }
 
-    async deleteUser(id: string) {
+    async deleteUser(id: string): Promise<UserModel | unknown> {
         try {
             await userRepository.deleteUser(id, { isdeleted: true });
             return { message: 'User successfully deleted' };

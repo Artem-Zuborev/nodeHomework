@@ -4,7 +4,7 @@ import * as http from 'http';
 import router from './routes/main.router';
 import cors from 'cors';
 
-import startDb  from './db/startDatabase';
+import './db/startDatabase';
 import logger from "./middlewares/logger.middleware";
 import errorHandler from "./middlewares/errorsHandler.middleware";
 
@@ -45,7 +45,6 @@ process
         process.exit(1);
     });
 
-startDb.then();
 const server = http.createServer(app);
 const port = 3000;
 server.listen(port);

@@ -9,7 +9,7 @@ interface Deletion {
 
 
 class GroupRepository {
-    async createGroup(data: GroupModel) {
+    async createGroup(data: GroupModel): Promise<GroupModel | unknown> {
         try {
             return await group.create({...data});
         } catch (err) {
@@ -17,7 +17,7 @@ class GroupRepository {
         }
     }
 
-    async updateGroup(id: string, data: Partial<GroupModel>) {
+    async updateGroup(id: string, data: Partial<GroupModel>): Promise<GroupModel | unknown> {
         try {
             await group.update({ ...data }, { where: { id } });
             return { message: 'Group successfully delete' };
@@ -26,7 +26,7 @@ class GroupRepository {
         }
     }
 
-    async getGroupById(id: string) {
+    async getGroupById(id: string): Promise<GroupModel | unknown> {
         try {
             return await group.findByPk(id);
         } catch (err) {
@@ -34,7 +34,7 @@ class GroupRepository {
         }
     }
 
-    async getAllGroups() {
+    async getAllGroups(): Promise<GroupModel | unknown> {
         try {
             return await group.findAll();
         } catch (err) {

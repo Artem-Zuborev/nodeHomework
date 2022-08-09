@@ -11,4 +11,6 @@ const sequelizeConnection = async () => {
     } catch (error) {
         console.error('Unable to connect to the database:', error)
     }}
-export default sequelizeConnection().then()
+sequelizeConnection().then(() => {
+    console.log('Database successfully initialized')
+})

@@ -1,21 +1,22 @@
 import {Model} from 'sequelize/types';
 import db from '../db/initDb';
+import {UserGroupModel} from "../types/userGroup.model";
 
-const userGroup = db.userGroup;
 
 class UserGroupRepository {
-    async addUserGroup(groupId: string, userId: string) {
+    public userGroup = db.userGroup;
+    async addUserGroup(groupId: string, userId: string): Promise<UserGroupModel | unknown> {
         try {
             console.log(groupId, userId);
-            return await userGroup.create({userId, groupId});
+            return await this.userGroup.create({userId, groupId});
         } catch (err) {
             console.log(`Cannot create UserGroup ${err}`);
         }
     }
 
-    async getUserGroup(userId: string, groupId: string) {
+    async getUserGroup(userId: string, groupId: string): Promise<UserGroupModel | unknown> {
         try {
-            return await userGroup.findOne({
+            return await this.userGroup.findOne({
                 where: {userId, groupId}
             });
         } catch (err) {
@@ -23,9 +24,9 @@ class UserGroupRepository {
         }
     }
 
-    async getUserGroupsByGroupId(groupId: string) {
+    async getUserGroupsByGroupId(groupId: string): Promise<UserGroupModel | unknown> {
         try {
-            return await userGroup.findAll({
+            return await this.userGroup.findAll({
                 where: {groupId}
             });
         } catch (err) {
@@ -33,7 +34,7 @@ class UserGroupRepository {
         }
     }
 
-    async removeUserGroup(group: Model) {
+    async removeUserGroup(group: Model): Promise<UserGroupModel | unknown> {
         try {
             await group?.destroy();
             return { message: 'UserGroup successfully deleted' };
@@ -42,9 +43,9 @@ class UserGroupRepository {
         }
     }
 
-    async getAllUserGroups() {
+    async getAllUserGroups(): Promise<UserGroupModel | unknown> {
         try {
-            return await userGroup.findAll();
+            return await this.userGroup.findAll();
         } catch (err) {
             console.log(`Cannot find UserGroups ${err}`);
         }

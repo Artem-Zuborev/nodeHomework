@@ -4,8 +4,8 @@ import UserGroupRepository from "../repositories/userGroup.repository";
 import {Model} from "sequelize";
 
 
-class GroupModule {
-    async createGroup(data: GroupModel) {
+class GroupService {
+    async createGroup(data: GroupModel): Promise<GroupModel | unknown> {
         try {
             return await GroupRepository.createGroup(data);
         } catch (err) {
@@ -13,7 +13,7 @@ class GroupModule {
         }
     }
 
-    async updateGroup(id: string, data: Partial<GroupModel>) {
+    async updateGroup(id: string, data: Partial<GroupModel>): Promise<GroupModel | unknown> {
         try {
             await GroupRepository.updateGroup(id, data);
             return await GroupRepository.getGroupById(id);
@@ -22,7 +22,7 @@ class GroupModule {
         }
     }
 
-    async getGroupById(id: string) {
+    async getGroupById(id: string): Promise<GroupModel | unknown> {
         try {
             return await GroupRepository.getGroupById(id);
         } catch (err) {
@@ -30,7 +30,7 @@ class GroupModule {
         }
     }
 
-    async getAllGroups() {
+    async getAllGroups(): Promise<GroupModel | unknown> {
         try {
             return await GroupRepository.getAllGroups();
         } catch (err) {
@@ -38,7 +38,7 @@ class GroupModule {
         }
     }
 
-    async addUserToGroup(userId: string, groupId: string) {
+    async addUserToGroup(userId: string, groupId: string): Promise<GroupModel | unknown> {
         try {
             return await UserGroupRepository.addUserGroup(userId, groupId);
         } catch (err) {
@@ -46,7 +46,7 @@ class GroupModule {
         }
     }
 
-    async removeUserFromGroup(userId: string, groupId: string) {
+    async removeUserFromGroup(userId: string, groupId: string): Promise<GroupModel | unknown> {
         try {
             const group = (await UserGroupRepository.getUserGroup(
                 userId,
@@ -59,20 +59,20 @@ class GroupModule {
         }
     }
 
-    async deleteGroupById(id: string) {
+    async deleteGroupById(id: string): Promise<GroupModel | unknown> {
         try {
             await GroupRepository.hardDeleteGroup(id);
-            const userGroups = await UserGroupRepository.getUserGroupsByGroupId(id);
+            const userGroups: any = await UserGroupRepository.getUserGroupsByGroupId(id);
             if (userGroups) {
                 userGroups.forEach((userGroup) => {
                     UserGroupRepository.removeUserGroup(userGroup);
                 });
             }
-            return { message: 'Group succefully deleted!' };
+            return { message: 'Group successfully deleted!' };
         } catch (err) {
             return { message: `Cannot create Group ${err}` };
         }
     }
 }
 
-export default new GroupModule();
+export default new GroupService();

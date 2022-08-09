@@ -1,22 +1,23 @@
 import { Request, Response } from 'express';
 import userService from '../services/user.service';
 import * as crypto from "crypto";
+import {UserModel} from "../types/user.model";
 
 class UserController {
-    async getAllUsers(req: Request, res: Response) {
+    async getAllUsers(req: Request, res: Response): Promise<UserModel | unknown> {
         try {
             const users = await userService.getAllUsers();
             if (users) {
-                res.send(users);
+               return res.status(200).send(users);
             } else {
-                res.send({ message: 'Cannot get all users' });
+               return  res.sendStatus(404).send({ message: 'Cannot get all users' });
             }
         } catch (err) {
             console.log('Cannot find users', err);
         }
     }
 
-    async getUserById(req: Request, res: Response) {
+    async getUserById(req: Request, res: Response): Promise<UserModel | unknown> {
         const id = req.params?.id;
         try {
             const user = await userService.getUserById(id as string);
@@ -30,7 +31,7 @@ class UserController {
         }
     }
 
-    async postUser(req: Request, res: Response) {
+    async postUser(req: Request, res: Response): Promise<UserModel | unknown> {
         const newUser = {
                 id: crypto.randomUUID(),
                 login: req.body.login,
@@ -46,7 +47,7 @@ class UserController {
         }
     }
 
-    async putUser(req: Request, res: Response) {
+    async putUser(req: Request, res: Response): Promise<UserModel | unknown> {
         try {
             const user = await userService.putUser(
                 req.params.id as string,
@@ -63,7 +64,7 @@ class UserController {
     }
 
 
-    async deleteUser(req: Request, res: Response) {
+    async deleteUser(req: Request, res: Response): Promise<UserModel | unknown> {
         try {
             const message = await userService.deleteUser(req.params.id as string);
             return res.status(201).send(message);
